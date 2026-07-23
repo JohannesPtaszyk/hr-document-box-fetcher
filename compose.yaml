@@ -1,0 +1,19 @@
+# On-demand fetcher (no long-running service):
+#   docker compose run --rm fetcher
+# Schedule it (cron / systemd timer) to run daily.
+#
+# Credentials are read from ./credentials (mounted at /creds), NOT docker env —
+# aconso passwords often contain `$`, which docker-compose would treat as
+# variable interpolation and mangle.
+services:
+  fetcher:
+    image: mcr.microsoft.com/playwright:v1.49.0-noble
+    working_dir: /app
+    command: sh -c "npm i -s playwright@1.49.0 >/dev/null 2>&1 && node fetch.mjs"
+    env_file: [ .env ]                       # HRBOX_HOST, NTFY_*, DEBUG (no secrets with $)
+    volumes:
+      - ./fetch.mjs:/app/fetch.mjs:ro
+      - ./credentials:/creds:ro              # HRBOX_USER / HRBOX_PASSWORD
+      - ${OUT_DIR:-./out}:/out               # downloaded PDFs (e.g. a Paperless consume dir)
+      - ./state:/state                       # remembers processed documents
+    restart: "no"
