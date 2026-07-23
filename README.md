@@ -5,6 +5,11 @@ Automatically download documents from an **aconso HR Document Box**
 [Paperless-ngx](https://docs.paperless-ngx.com/) consume directory, so your
 payslips get OCR'd and archived without manual downloads.
 
+> ⚙️ **Mostly AI-generated.** This tool was built collaboratively with
+> [Claude Code](https://claude.com/claude-code) — including reverse-engineering
+> the aconso login flow and REST API. Reviewed and run in production by a human,
+> but read the code before trusting it with your credentials.
+
 ## How it works
 
 1. Logs in through the UI5 login form with headless Chromium (Playwright). The
